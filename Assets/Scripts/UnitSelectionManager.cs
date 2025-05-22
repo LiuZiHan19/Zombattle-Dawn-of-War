@@ -1,10 +1,14 @@
+using System;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-public class UISelectionManager : MonoBehaviour
+public class UnitSelectionManager : MonoBehaviour
 {
-    public static UISelectionManager Instance { get; private set; }
+    public static UnitSelectionManager Instance { get; private set; }
+
+    public event EventHandler OnSelectionStart;
+    public event EventHandler OnSelectionEnd;
 
     private void Awake()
     {
@@ -13,6 +17,16 @@ public class UISelectionManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            OnSelectionStart?.Invoke(this, EventArgs.Empty);
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            OnSelectionEnd?.Invoke(this, EventArgs.Empty);
+        }
+
         if (Input.GetMouseButtonDown(1))
         {
             EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
